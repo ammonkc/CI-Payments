@@ -11,13 +11,39 @@
  */
  
 class Payments extends CI_Driver_Library {
-
-    protected $valid_drivers = array(
-        'paypal', 'googlecheckout'
-    );
     
+    // Codeigniter superobject
+    protected $CI;
+    
+    // All gateways mostly need an API key
+    protected $api_key;
+    
+    // The gateway URL to process the payment
+    protected $gateway_url;
+    
+    // Set the total amount to charge
+    protected $total_amount;
+    
+    /**
+    * Constructor
+    * 
+    * @param mixed $params
+    * @return Payments
+    */
     public function __construct($params = array())
     {
+        $this->valid_drivers[] = 'paypal';
+        $this->valid_drivers[] = 'googlecheckout';
+    }
+    
+    /**
+    * Set the payment gateway url
+    * 
+    * @param mixed $gateway_url
+    */
+    public function set_gateway($gateway_url)
+    {
+        $this->gateway_url = trim($gateway_url);
     }
     
     /**
@@ -25,9 +51,19 @@ class Payments extends CI_Driver_Library {
     * 
     * @param mixed $api_key
     */
-    function set_apikey($api_key)
+    public function set_apikey($api_key)
     {
-        
+        $this->api_key = trim($api_key);
+    }
+    
+    /**
+    * The total amount to charge the user
+    * 
+    * @param mixed $total
+    */
+    public function set_total($total)
+    {
+           
     }
 
 }

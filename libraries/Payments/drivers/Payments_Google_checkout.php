@@ -11,7 +11,7 @@
  * @link          http://ilikekillnerds.com
  */
  
-class Payments_Paypal extends CI_Driver {
+class Payments_Google_checkout extends CI_Driver {
     
     protected $fields = array();
 
