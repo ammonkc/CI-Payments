@@ -15,14 +15,25 @@ class Payments extends CI_Driver_Library {
     // Codeigniter superobject
     protected $CI;
     
-    // All gateways mostly need an API key
-    protected $api_key;
+    // Gateway config options
+    protected $_gateway_config = array(
+        'api_key'     => '',
+        'gateway_url' => ''
+    );
     
-    // The gateway URL to process the payment
-    protected $gateway_url;
+    // Information passed to third party provider
+    protected $_fields = array(
+        'card_number'   => '',
+        'expiry_date'   => '',
+        'cvn_code'      => '',
+        'first_name'    => '',
+        'last_name'     => '',
+        'total_amount'  => '',
+        'currency_code' => 'AUD'
+    );
     
-    // Set the total amount to charge
-    protected $total_amount;
+    // Test mode means we're not really processing payments
+    protected $test_mode;
     
     /**
     * Constructor
@@ -43,7 +54,7 @@ class Payments extends CI_Driver_Library {
     */
     public function set_gateway($gateway_url)
     {
-        $this->gateway_url = trim($gateway_url);
+        $this->_gateway_config['gateway_url'] = trim($gateway_url);
     }
     
     /**
@@ -53,7 +64,7 @@ class Payments extends CI_Driver_Library {
     */
     public function set_apikey($api_key)
     {
-        $this->api_key = trim($api_key);
+        $this->$this->_gateway_config['api_key'] = trim($api_key);
     }
     
     /**
@@ -63,7 +74,16 @@ class Payments extends CI_Driver_Library {
     */
     public function set_total($total)
     {
-           
+        $this->_fields['total_amount'] = trim($total);
+    }
+    
+    /**
+    * Process a payment
+    * 
+    */
+    public function process()
+    {
+        
     }
 
 }

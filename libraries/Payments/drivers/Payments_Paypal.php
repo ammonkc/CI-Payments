@@ -13,7 +13,11 @@
  
 class Payments_Paypal extends CI_Driver {
     
-    protected $fields = array();
+    protected $_driver_fields = array(
+        'paypal_email' => ''
+    );
+    
+    protected $test_mode = TRUE;
 
     public function __construct()
     {
