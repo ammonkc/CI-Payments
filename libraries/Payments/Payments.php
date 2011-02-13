@@ -15,25 +15,8 @@ class Payments extends CI_Driver_Library {
     // Codeigniter superobject
     protected $CI;
     
-    // Gateway config options
-    protected $_gateway_config = array(
-        'api_key'     => '',
-        'gateway_url' => ''
-    );
-    
-    // Information passed to third party provider
-    protected $_fields = array(
-        'card_number'   => '',
-        'expiry_date'   => '',
-        'cvn_code'      => '',
-        'first_name'    => '',
-        'last_name'     => '',
-        'total_amount'  => '',
-        'currency_code' => 'AUD'
-    );
-    
-    // Test mode means we're not really processing payments
-    protected $test_mode;
+    // Default payment driver
+    protected $default_driver;
     
     /**
     * Constructor
@@ -41,44 +24,23 @@ class Payments extends CI_Driver_Library {
     * @param mixed $params
     * @return Payments
     */
-    public function __construct($params = array())
+    public function __construct()
     {
-        $this->valid_drivers[] = 'paypal';
-        $this->valid_drivers[] = 'googlecheckout';
+        // Load payments config
+        $this->CI->load->config('payments');
+        
+        // Get valid drivers
+        foreach ($this->ci->config->item('valid_drivers') AS $driver)
+        {
+            $this->valid_drivers[] = $driver;   
+        }
+        
+        // Get the default payment driver
+        $this->default_driver = $this->ci->config->item('default_driver');
     }
     
     /**
-    * Set the payment gateway url
-    * 
-    * @param mixed $gateway_url
-    */
-    public function set_gateway($gateway_url)
-    {
-        $this->_gateway_config['gateway_url'] = trim($gateway_url);
-    }
-    
-    /**
-    * All payment providers need some kind of API key to process payments.
-    * 
-    * @param mixed $api_key
-    */
-    public function set_apikey($api_key)
-    {
-        $this->$this->_gateway_config['api_key'] = trim($api_key);
-    }
-    
-    /**
-    * The total amount to charge the user
-    * 
-    * @param mixed $total
-    */
-    public function set_total($total)
-    {
-        $this->_fields['total_amount'] = trim($total);
-    }
-    
-    /**
-    * Process a payment
+    * Process payment
     * 
     */
     public function process()

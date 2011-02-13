@@ -13,20 +13,11 @@
  
 class Payments_Paypal extends CI_Driver {
     
-    protected $_driver_fields = array(
-        'paypal_email' => ''
-    );
-    
-    protected $test_mode = TRUE;
+    protected $_driver_fields = array();
 
     public function __construct()
     {
-        parent::set_gateway('https://www.paypal.com/cgi-bin/webscr');   
-    }
-    
-    public function _add_field($field, $value)
-    {
-        $this->fields[$field] = $value;
+          
     }
 
 }
