@@ -29,7 +29,7 @@ class Payments_Paypal extends CI_Driver {
 
     public function __construct()
     {
-          
+        $this->payment_url = "https://www.paypal.com/cgi-bin/webscr";
     }
 
 }

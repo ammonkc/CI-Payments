@@ -24,11 +24,17 @@ class Payments extends CI_Driver_Library {
     // Default payment driver
     protected $_adapter = "paypal";
     
+    // URL where payments are processed
+    protected $payment_api = "";
+    
     // Fields of info for sending of payments
     protected $_fields = array();
     
     // Payment processor result
     protected $_result = '';
+    
+    // Last error we had
+    protected $last_error = '';
     
     /**
     * Constructor
@@ -45,12 +51,40 @@ class Payments extends CI_Driver_Library {
     * 
     * @param mixed $fields
     */
-    public function set_fields($fields = array())
+    public function add_fields($fields = array())
     {
         foreach ($fields as $name => $value)
         {
             $this->_fields[$name] = $value;
         }
+    }
+    
+    /**
+    * Add a single payment field
+    * 
+    * @param mixed $name
+    * @param mixed $value
+    */
+    public function add_field($name, $value)
+    {
+        $this->_fields[$name] = $value;
+    }
+    
+    function payment_form($form_name='')
+    {
+        if ($form_name == '')
+        {
+            return FALSE;
+        }
+        
+        $str = '';
+        $str .= '<form method="post" action="'.$this->payment_api.'" name="'.$form_name.'"/>' . "\n";
+        foreach ($this->fields as $name => $value)
+                $str .= "<input type='hidden' name='".$name."' value='".$value."' />" . "\n";
+        $str .= '<p>'. "<button type='submit' id='submit_btn'>Submit</button>" . '</p>';
+        $str .= "</form>" . "\n";
+
+        return $str;
     }
     
     /**
