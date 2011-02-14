@@ -15,8 +15,20 @@ class Payments extends CI_Driver_Library {
     // Codeigniter superobject
     protected $CI;
     
+    // Valid child drivers
+    protected $valid_drivers = array(
+        'paypal',
+        'googlecheckout'
+    );
+    
     // Default payment driver
-    protected $default_driver;
+    protected $_adapter = "paypal";
+    
+    // Fields of info for sending of payments
+    protected $_fields = array();
+    
+    // Payment processor result
+    protected $_result = '';
     
     /**
     * Constructor
@@ -26,26 +38,28 @@ class Payments extends CI_Driver_Library {
     */
     public function __construct()
     {
-        // Load payments config
-        $this->CI->load->config('payments');
-        
-        // Get valid drivers
-        foreach ($this->ci->config->item('valid_drivers') AS $driver)
-        {
-            $this->valid_drivers[] = $driver;   
-        }
-        
-        // Get the default payment driver
-        $this->default_driver = $this->ci->config->item('default_driver');
     }
     
     /**
-    * Process payment
+    * Sets payment field data
+    * 
+    * @param mixed $fields
+    */
+    public function set_fields($fields = array())
+    {
+        foreach ($fields as $name => $value)
+        {
+            $this->_fields[$name] = $value;
+        }
+    }
+    
+    /**
+    * Process payment using Payment processing function
     * 
     */
     public function process()
     {
-        
+        $this->{$this->_adapter}->process();
     }
 
 }

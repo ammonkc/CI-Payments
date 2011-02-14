@@ -13,7 +13,19 @@
  
 class Payments_Paypal extends CI_Driver {
     
-    protected $_driver_fields = array();
+    // Driver specific fields
+    protected $_driver_fields = array
+    (
+        // PayPal API and username
+        'username' => NULL,
+        'password' => NULL,
+
+        // PayPal API signature
+        'signature' => NULL,
+
+        // PayPal environment: live, sandbox, beta-sandbox
+        'environment' => 'sandbox',
+    );
 
     public function __construct()
     {
