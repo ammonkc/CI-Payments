@@ -18,20 +18,8 @@ class Payments extends CI_Driver_Library {
     // cURL instance
     protected $_curl;
 
-    // Valid child drivers
-    protected $valid_drivers = array(
-        'paypal',
-        'googlecheckout'
-    );
-
-    // Default payment driver
-    protected $_adapter = "paypal";
-
-    // Options for accessing our API
-    protected $_api_config = array
-    (
-        'gateway_url' => ''
-    );
+    // Gateway config
+    protected $_config;
 
     // Fields of info for sending of payments
     protected $_fields = array();
@@ -50,6 +38,23 @@ class Payments extends CI_Driver_Library {
     */
     public function __construct()
     {
+        $this->CI =& get_instance();
+
+        // Load our config file
+        $this->CI->load->config('payments');
+
+        // Get valid drivers
+        foreach ($this->CI->config->item('valid_drivers') as $driver)
+        {
+            $this->valid_drivers[] = $driver;
+        }
+
+        // Get default driver
+        $this->_adapter = $this->CI->config->item('default_driver');
+
+        // Get the config depending on what adapter we have
+        $this->_config = $this->CI->config->item($this->_adapter);
+
     }
 
     /**
@@ -76,25 +81,10 @@ class Payments extends CI_Driver_Library {
         $this->_fields[$name] = $value;
     }
 
-    function payment_form($form_name='')
-    {
-        if ($form_name == '')
-        {
-            return FALSE;
-        }
-
-        $str = '';
-        $str .= '<form method="post" action="'.$this->payment_api.'" name="'.$form_name.'"/>' . "\n";
-        foreach ($this->fields as $name => $value)
-                $str .= "<input type='hidden' name='".$name."' value='".$value."' />" . "\n";
-        $str .= '<p>'. "<button type='submit' id='submit_btn'>Submit</button>" . '</p>';
-        $str .= "</form>" . "\n";
-
-        return $str;
-    }
-
     /**
     * Process payment using Payment processing function
+    * which will call the child driver process function
+    * which will process the payment.
     *
     */
     public function process()
