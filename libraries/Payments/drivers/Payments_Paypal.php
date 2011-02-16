@@ -10,9 +10,9 @@
  * @copyright     Copyright (c) 2011 Dwayne Charrington.
  * @link          http://ilikekillnerds.com
  */
- 
+
 class Payments_Paypal extends CI_Driver {
-    
+
     // Driver specific fields
     protected $_driver_fields = array
     (
@@ -25,11 +25,24 @@ class Payments_Paypal extends CI_Driver {
 
         // PayPal environment: live, sandbox, beta-sandbox
         'environment' => 'sandbox',
+
+        // Text on the payment button
+        'submit_button' => 'Pay Now'
+
     );
 
     public function __construct()
     {
-        $this->payment_url = "https://www.paypal.com/cgi-bin/webscr";
+        $this->_api_config['gateway_url'] = "https://www.paypal.com/cgi-bin/webscr";
+
+        // Default payment fields
+        $this->add_field('rm','2'); // Return method is POST
+        $this->add_field('cmd','_xclick');
+
+        $this->add_field('currency_code', $this->_api_config['currency_code']);
+        $this->add_field('quantity', '1');
+
+        $this->_driver_fields['submit_button'] = "Please pay now";
     }
 
 }
