@@ -45,3 +45,14 @@ $config['paypal'] = array
     // PayPal environment: live, sandbox, beta-sandbox
     'environment'   => 'sandbox',
 );
+
+/**
+* Google Checkout driver configuration settings
+* No settings as of yet, because Google checkout
+* is different to Paypal.
+*
+* @var mixed
+*/
+$config['googlecheckout'] = array
+(
+);
