@@ -10,19 +10,12 @@
  * @copyright     Copyright (c) 2011 Dwayne Charrington.
  * @link          http://ilikekillnerds.com
  */
- 
-class Payments_Google_checkout extends CI_Driver {
-    
-    protected $fields = array();
+
+class Payments_Googlecheckout extends CI_Driver {
 
     public function __construct()
     {
-        parent::set_gateway('https://www.paypal.com/cgi-bin/webscr');   
-    }
-    
-    public function _add_field($field, $value)
-    {
-        $this->fields[$field] = $value;
+
     }
 
 }
