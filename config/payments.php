@@ -23,6 +23,13 @@ $config['valid_drivers'] = array
 $config['default_driver'] = "paypal";
 
 /**
+* Currency code
+*
+* @var mixed
+*/
+$config['currency_code'] = "AU";
+
+/**
 * Paypal driver configuration settings
 *
 * @var mixed
@@ -32,8 +39,9 @@ $config['paypal'] = array
     // Where payments are processed
     'gateway_url'   => 'https://www.paypal.com/cgi-bin/webscr',
 
-    // Currency code
-    'currency_code' => 'AU',
+    'success_url'   => 'payment/success',
+    'failure_url'   => 'payment/failure',
+    'notify_url'    => 'payment/validate',
 
     // PayPal API and username
     'username'      => NULL,

@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 /**
  * CodeIgniter Payments
  *
@@ -25,10 +26,10 @@ class Payments extends CI_Driver_Library {
     protected $_fields = array();
 
     // Payment processor result
-    protected $_result = '';
+    protected $_response = array();
 
-    // Last error we had
-    protected $last_error = '';
+    // Errors
+    protected $_errors = array();
 
     /**
     * Constructor
@@ -54,7 +55,6 @@ class Payments extends CI_Driver_Library {
 
         // Get the config depending on what adapter we have
         $this->_config = $this->CI->config->item($this->_adapter);
-
     }
 
     /**
@@ -90,6 +90,30 @@ class Payments extends CI_Driver_Library {
     public function process()
     {
         $this->{$this->_adapter}->process();
+    }
+
+    /**
+    * Most payment gateways send back a result which will call
+    * this function and get the result
+    *
+    */
+    public function validate()
+    {
+        $this->{$this->_adapter}->validate();
+    }
+
+    /**
+    * Adds a new config item to the _config array or
+    * overwrites a previous value in the config array
+    * if the value we are trying to add exists.
+    *
+    * @param mixed $driver
+    * @param mixed $name
+    * @param mixed $value
+    */
+    public function add_config_item($driver, $name, $value)
+    {
+        $this->_config[$driver][$name] = $value;
     }
 
 }
