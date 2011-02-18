@@ -17,7 +17,6 @@ class Payments_paypal extends CI_Driver {
     const SUBSCRIPTION = '_xclick-subscriptions';
 
     protected $CI;
-    protected $_curl;
     protected $_response;
 
     public function __construct()
@@ -108,17 +107,17 @@ class Payments_paypal extends CI_Driver {
             return FALSE;
         }
 
-        $this->_curl = curl_init();
-        curl_setopt($this->_curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($this->_curl, CURLOPT_POST, 1);
-        curl_setopt($this->_curl, CURLOPT_HEADER , 0);
-        curl_setopt($this->_curl, CURLOPT_VERBOSE, 1);
-        curl_setopt($this->_curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($this->_curl, CURLOPT_TIMEOUT, 30);
-        curl_setopt($this->_curl, CURLOPT_URL, $gateway_url);
-        curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $post_string);
-        curl_setopt($this->_curl, CURLOPT_HTTPHEADER, array("Content-Type: application/x-www-form-urlencoded", "Content-Length: " . strlen($post_string)));
-        $result = curl_exec($this->_curl);
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_HEADER , 0);
+        curl_setopt($curl, CURLOPT_VERBOSE, 1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_URL, $gateway_url);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $post_string);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/x-www-form-urlencoded", "Content-Length: " . strlen($post_string)));
+        $result = curl_exec($curl);
 
         if ($result === "VERIFIED")
         {
