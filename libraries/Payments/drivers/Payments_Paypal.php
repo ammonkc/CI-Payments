@@ -33,12 +33,6 @@ class Payments_Paypal extends CI_Driver {
         $this->add_field('cancel_return', $this->_config['paypal']['failure_url']);
         $this->add_field('notify_url', $this->_config['paypal']['notify_url']);
         
-        // If we are in test mode, lets overwrite the gateway url with the sandbox url
-        if ($this->_config['paypal']['mode'] == 'test')
-        {
-            $this->add_config_item('paypal', 'gateway_url', $this->_config['paypal']['sandbox_url']);
-        }
-        
     }
 
     /**
@@ -48,12 +42,22 @@ class Payments_Paypal extends CI_Driver {
     public function process()
     {
         $this->CI->load->helper('form');
+        
+        // If we are in test mode, lets overwrite the gateway url with the sandbox url
+        if ($this->_config['paypal']['mode'] == 'test')
+        {
+            $gateway_url = $this->_config['paypal']['sandbox_url'];
+        }
+        else
+        {
+            $gateway_url = $this->_config['paypal']['gateway_url'];
+        }
 
         $str = '<html><head><title>Processing Paypal payment..</title></head><body onLoad="document.forms[\'paypal\'].submit();">
             <h2>Preparing Transaction</h2>
             <p style="text-align:center;">Please wait while your order is being processed.<br />You will be redirected to the paypal website.</p>
             <p style="text-align:center;">If your browser does not redirect you, please<br />click the Continue button below to proceed.</p>
-            <form id="paypal" name="paypal" method="post" action="'.$this->_config['paypal']['gateway_url'].'"><p style="text-align:center;padding-top:20px;">' . "\n";
+            <form id="paypal" name="paypal" method="post" action="'.$gateway_url.'"><p style="text-align:center;padding-top:20px;">' . "\n";
 
         foreach ($this->_fields as $name => $value)
         {
@@ -71,7 +75,17 @@ class Payments_Paypal extends CI_Driver {
     */
     public function callback()
     {
-        $url_parsed = parse_url($this->_config['paypal']['gateway_url']);
+        // If we are in test mode, lets overwrite the gateway url with the sandbox url
+        if ($this->_config['paypal']['mode'] == 'test')
+        {
+            $gateway_url = $this->_config['paypal']['sandbox_url'];
+        }
+        else
+        {
+            $gateway_url = $this->_config['paypal']['gateway_url'];
+        }
+        
+        $url_parsed = parse_url($gateway_url);
 
         $post_string = '';
 
@@ -99,7 +113,7 @@ class Payments_Paypal extends CI_Driver {
         curl_setopt($this->_curl, CURLOPT_VERBOSE, 1);
         curl_setopt($this->_curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($this->_curl, CURLOPT_TIMEOUT, 30);
-        curl_setopt($this->_curl, CURLOPT_URL, $this->_config['paypal']['gateway_url']);
+        curl_setopt($this->_curl, CURLOPT_URL, $gateway_url);
         curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $post_string);
         curl_setopt($this->_curl, CURLOPT_HTTPHEADER, array("Content-Type: application/x-www-form-urlencoded", "Content-Length: " . strlen($post_string)));
         $result = curl_exec($this->_curl);
