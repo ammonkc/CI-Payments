@@ -70,6 +70,8 @@ class Payments_Paypal extends CI_Driver {
         $url_parsed = parse_url($this->_config['paypal']['gateway_url']);
 
         $post_string = '';
+
+        // If we have post data
         if ($_POST)
         {
             foreach ($_POST as $key => $val)
@@ -93,7 +95,7 @@ class Payments_Paypal extends CI_Driver {
         curl_setopt($this->_curl, CURLOPT_VERBOSE, 1);
         curl_setopt($this->_curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($this->_curl, CURLOPT_TIMEOUT, 30);
-        curl_setopt($this->_curl, CURLOPT_URL, $this->_paypal_url);
+        curl_setopt($this->_curl, CURLOPT_URL, $this->_config['paypal']['gateway_url']);
         curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $post_string);
         curl_setopt($this->_curl, CURLOPT_HTTPHEADER, array("Content-Type: application/x-www-form-urlencoded", "Content-Length: " . strlen($post_string)));
         $result = curl_exec($this->_curl);
