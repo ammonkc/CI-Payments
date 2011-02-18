@@ -11,7 +11,7 @@
  * @link          http://ilikekillnerds.com
  */
 
-class Payments_Paypal extends CI_Driver {
+class Payments_paypal extends CI_Driver {
 
     const BUYNOW       = '_xclick';
     const SUBSCRIPTION = '_xclick-subscriptions';
@@ -66,7 +66,7 @@ class Payments_Paypal extends CI_Driver {
 
         $str .= '<input type="submit" value="'.$this->_config['paypal']["submit_button"].'" name="pp_submit" id="pp_submit" /></p></form></body></html>';
 
-        return $str;
+        echo $str;
     }
 
     /**
