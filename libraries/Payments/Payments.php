@@ -93,16 +93,6 @@ class Payments extends CI_Driver_Library {
     }
 
     /**
-    * Most payment gateways send back a result which will call
-    * this function and get the result
-    *
-    */
-    public function validate()
-    {
-        $this->{$this->_adapter}->validate();
-    }
-
-    /**
     * Some payment processors like Paypal send back data via POST depending
     * whether or not the transaction was successfull. Not all payment gateways
     * will have a callback, but it's here in-case.

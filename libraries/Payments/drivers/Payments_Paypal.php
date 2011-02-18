@@ -32,6 +32,13 @@ class Payments_Paypal extends CI_Driver {
         $this->add_field('return', $this->_config['paypal']['success_url']);
         $this->add_field('cancel_return', $this->_config['paypal']['failure_url']);
         $this->add_field('notify_url', $this->_config['paypal']['notify_url']);
+        
+        // If we are in test mode, lets overwrite the gateway url with the sandbox url
+        if ($this->_config['paypal']['mode'] == 'test')
+        {
+            parent::add_config_item('paypal', 'gateway_url', $this->_config['paypal']['sandbox_url']);
+        }
+        
     }
 
     /**

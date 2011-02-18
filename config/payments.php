@@ -40,9 +40,10 @@ $config['paypal'] = array
     'mode'          => 'test',
 
     // Where payments are processed
-    // If sandboxing use 'https://www.sandbox.paypal.com/cgi-bin/webscr'
-    // else use 'https://www.paypal.com/cgi-bin/webscr'
     'gateway_url'   => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
+    
+    // For testing
+    'sandbox_url'   => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
 
     'success_url'   => 'payment/success',
     'failure_url'   => 'payment/failure',
