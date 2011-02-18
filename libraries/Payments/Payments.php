@@ -91,7 +91,7 @@ class Payments extends CI_Driver_Library {
     */
     public function callback()
     {
-        $this->{$this->_adapter}->callback();
+        return $this->{$this->_adapter}->callback();
     }
 
     /**

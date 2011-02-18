@@ -17,6 +17,8 @@ class Payments_paypal extends CI_Driver {
     const SUBSCRIPTION = '_xclick-subscriptions';
 
     protected $CI;
+    protected $_curl;
+    protected $_response;
 
     public function __construct()
     {
