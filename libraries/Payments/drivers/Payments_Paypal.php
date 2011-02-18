@@ -29,11 +29,11 @@ class Payments_paypal extends CI_Driver {
         $this->add_field('cmd', SELF::BUYNOW);
 
         $this->add_field('currency_code', $this->CI->config->item('currency_code'));
-        $this->add_field('quantity', $this->_fields['quantity']);
+        $this->add_field('quantity', $this->CI->payments->_fields['quantity']);
         $this->add_field('no_note', '1');
-        $this->add_field('return', $this->_config['paypal']['success_url']);
-        $this->add_field('cancel_return', $this->_config['paypal']['failure_url']);
-        $this->add_field('notify_url', $this->_config['paypal']['notify_url']);
+        $this->add_field('return', $this->CI->payments->_config['paypal']['success_url']);
+        $this->add_field('cancel_return', $this->CI->payments->_config['paypal']['failure_url']);
+        $this->add_field('notify_url', $this->CI->payments->_config['paypal']['notify_url']);
         
     }
 
@@ -46,13 +46,13 @@ class Payments_paypal extends CI_Driver {
         $this->CI->load->helper('form');
         
         // If we are in test mode, lets overwrite the gateway url with the sandbox url
-        if ($this->_config['paypal']['mode'] == 'test')
+        if ($this->CI->payments->_config['paypal']['mode'] == 'test')
         {
-            $gateway_url = $this->_config['paypal']['sandbox_url'];
+            $gateway_url = $this->CI->payments->_config['paypal']['sandbox_url'];
         }
         else
         {
-            $gateway_url = $this->_config['paypal']['gateway_url'];
+            $gateway_url = $this->CI->payments->_config['paypal']['gateway_url'];
         }
 
         $str = '<html><head><title>Processing Paypal payment..</title></head><body onLoad="document.forms[\'paypal\'].submit();">
@@ -61,12 +61,12 @@ class Payments_paypal extends CI_Driver {
             <p style="text-align:center;">If your browser does not redirect you, please<br />click the Continue button below to proceed.</p>
             <form id="paypal" name="paypal" method="post" action="'.$gateway_url.'"><p style="text-align:center;padding-top:20px;">' . "\n";
 
-        foreach ($this->_fields as $name => $value)
+        foreach ($this->CI->payments->_fields as $name => $value)
         {
             $str .= '<input type="hidden" name="' . $name . '" value="' . $value . '" />' . "\n";
         }
 
-        $str .= '<input type="submit" value="'.$this->_config['paypal']["submit_button"].'" name="pp_submit" id="pp_submit" /></p></form></body></html>';
+        $str .= '<input type="submit" value="'.$this->CI->payments->_config['paypal']["submit_button"].'" name="pp_submit" id="pp_submit" /></p></form></body></html>';
 
         echo $str;
     }
@@ -78,13 +78,13 @@ class Payments_paypal extends CI_Driver {
     public function callback()
     {
         // If we are in test mode, lets overwrite the gateway url with the sandbox url
-        if ($this->_config['paypal']['mode'] == 'test')
+        if ($this->CI->payments->_config['paypal']['mode'] == 'test')
         {
-            $gateway_url = $this->_config['paypal']['sandbox_url'];
+            $gateway_url = $this->CI->payments->_config['paypal']['sandbox_url'];
         }
         else
         {
-            $gateway_url = $this->_config['paypal']['gateway_url'];
+            $gateway_url = $this->CI->payments->_config['paypal']['gateway_url'];
         }
         
         $url_parsed = parse_url($gateway_url);
