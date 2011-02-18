@@ -103,6 +103,17 @@ class Payments extends CI_Driver_Library {
     }
 
     /**
+    * Some payment processors like Paypal send back data via POST depending
+    * whether or not the transaction was successfull. Not all payment gateways
+    * will have a callback, but it's here in-case.
+    *
+    */
+    public function callback()
+    {
+        $this->{$this->_adapter}->callback();
+    }
+
+    /**
     * Adds a new config item to the _config array or
     * overwrites a previous value in the config array
     * if the value we are trying to add exists.

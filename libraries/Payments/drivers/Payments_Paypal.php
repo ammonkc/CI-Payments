@@ -65,7 +65,7 @@ class Payments_Paypal extends CI_Driver {
     * Validates the response from Paypal
     *
     */
-    public function validate()
+    public function callback()
     {
         $url_parsed = parse_url($this->_config['paypal']['gateway_url']);
 
