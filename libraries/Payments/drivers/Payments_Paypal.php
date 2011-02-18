@@ -22,9 +22,6 @@ class Payments_Paypal extends CI_Driver {
     {
         $this->CI =& get_instance();
 
-        // Add the gateway URL
-        $this->add_config_item('paypal', 'gateway_url', 'https://www.paypal.com/cgi-bin/webscr');
-
         // Default payment fields
         $this->add_field('rm','2'); // Return method is POST
         $this->add_field('cmd', SELF::BUYNOW);

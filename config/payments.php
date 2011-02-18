@@ -36,8 +36,13 @@ $config['currency_code'] = "AU";
 */
 $config['paypal'] = array
 (
+    // test means use the sandbox, live means use in production
+    'mode'          => 'test',
+
     // Where payments are processed
-    'gateway_url'   => 'https://www.paypal.com/cgi-bin/webscr',
+    // If sandboxing use 'https://www.sandbox.paypal.com/cgi-bin/webscr'
+    // else use 'https://www.paypal.com/cgi-bin/webscr'
+    'gateway_url'   => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
 
     'success_url'   => 'payment/success',
     'failure_url'   => 'payment/failure',
