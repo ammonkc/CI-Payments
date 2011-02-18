@@ -36,7 +36,7 @@ class Payments_Paypal extends CI_Driver {
         // If we are in test mode, lets overwrite the gateway url with the sandbox url
         if ($this->_config['paypal']['mode'] == 'test')
         {
-            parent::add_config_item('paypal', 'gateway_url', $this->_config['paypal']['sandbox_url']);
+            $this->add_config_item('paypal', 'gateway_url', $this->_config['paypal']['sandbox_url']);
         }
         
     }
