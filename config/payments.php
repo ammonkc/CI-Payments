@@ -40,7 +40,7 @@ $config['paypal'] = array
     'mode'          => 'test',
 
     // Where payments are processed
-    'gateway_url'   => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
+    'gateway_url'   => 'https://www.paypal.com/cgi-bin/webscr',
     
     // For testing
     'sandbox_url'   => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
