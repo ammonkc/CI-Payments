@@ -11,8 +11,7 @@
 */
 $config['valid_drivers'] = array
 (
-    "paypal",
-    "googlecheckout"
+    "paypal"
 );
 
 /**

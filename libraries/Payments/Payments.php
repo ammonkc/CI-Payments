@@ -16,20 +16,11 @@ class Payments extends CI_Driver_Library {
     // Codeigniter superobject
     protected $CI;
 
-    // cURL instance
-    protected $_curl;
-
     // Gateway config
     protected $_config;
 
     // Fields of info for sending of payments
     protected $_fields = array();
-
-    // Payment processor result
-    protected $_response = array();
-
-    // Errors
-    protected $_errors = array();
 
     /**
     * Constructor
@@ -37,7 +28,7 @@ class Payments extends CI_Driver_Library {
     * @param mixed $params
     * @return Payments
     */
-    public function __construct()
+    public function Payments()
     {
         $this->CI =& get_instance();
 
