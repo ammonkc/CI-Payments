@@ -16,19 +16,13 @@ class Payments extends CI_Driver_Library {
     // Codeigniter superobject
     protected $CI;
 
-    // Gateway config
-    protected $_config;
-
-    // Fields of info for sending of payments
-    protected $_fields = array();
-
     /**
     * Constructor
     *
     * @param mixed $params
     * @return Payments
     */
-    public function Payments()
+    public function __construct()
     {
         $this->CI =& get_instance();
 
@@ -43,33 +37,6 @@ class Payments extends CI_Driver_Library {
 
         // Get default driver
         $this->_adapter = $this->CI->config->item('default_driver');
-
-        // Get the config depending on what adapter we have
-        $this->_config = $this->CI->config->item($this->_adapter);
-    }
-
-    /**
-    * Sets payment field data
-    *
-    * @param mixed $fields
-    */
-    public function add_fields($fields = array())
-    {
-        foreach ($fields as $name => $value)
-        {
-            $this->_fields[$name] = $value;
-        }
-    }
-
-    /**
-    * Add a single payment field
-    *
-    * @param mixed $name
-    * @param mixed $value
-    */
-    public function add_field($name, $value)
-    {
-        $this->_fields[$name] = $value;
     }
 
     /**
@@ -78,9 +45,9 @@ class Payments extends CI_Driver_Library {
     * which will process the payment.
     *
     */
-    public function process()
+    public function process($fields = array())
     {
-        $this->{$this->_adapter}->process();
+        $this->{$this->_adapter}->process($fields);
     }
 
     /**
@@ -92,20 +59,6 @@ class Payments extends CI_Driver_Library {
     public function callback()
     {
         return $this->{$this->_adapter}->callback();
-    }
-
-    /**
-    * Adds a new config item to the _config array or
-    * overwrites a previous value in the config array
-    * if the value we are trying to add exists.
-    *
-    * @param mixed $driver
-    * @param mixed $name
-    * @param mixed $value
-    */
-    public function add_config_item($driver, $name, $value)
-    {
-        $this->_config[$driver][$name] = $value;
     }
 
 }

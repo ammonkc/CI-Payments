@@ -11,7 +11,7 @@
 */
 $config['valid_drivers'] = array
 (
-    "paypal"
+    "payments_paypal"
 );
 
 /**
@@ -37,6 +37,9 @@ $config['paypal'] = array
 (
     // test means use the sandbox, live means use in production
     'mode'          => 'test',
+    
+    // Default currency code for payments
+    'currency_code' => 'AU',
 
     // Where payments are processed
     'gateway_url'   => 'https://www.paypal.com/cgi-bin/webscr',
@@ -47,6 +50,9 @@ $config['paypal'] = array
     'success_url'   => 'payment/success',
     'failure_url'   => 'payment/failure',
     'notify_url'    => 'payment/validate',
+    
+    // Submit button for Paypal button
+    'submit_button'    => 'Proceed to Paypal!',
 
     // PayPal API and username
     'username'      => NULL,
