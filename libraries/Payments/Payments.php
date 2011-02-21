@@ -3,12 +3,18 @@
 /**
  * CodeIgniter Payments
  *
- * An open source driver based payments system for Codeigniter
+ * An open source driver based payments system for Codeigniter 2.0+. 
+ * 
+ * This is the main driver parent class that takes care of setting up 
+ * the valid drivers and calling child functions depending on what the 
+ * default class is set too.
  *
  * @package       CI Payments
+ * @category      Parent driver
  * @author        Dwayne Charrington
  * @copyright     Copyright (c) 2011 Dwayne Charrington.
  * @link          http://ilikekillnerds.com
+ * @license       http://ilikekillnerds.com/licence.txt
  */
 
 class Payments extends CI_Driver_Library {

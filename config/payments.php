@@ -1,11 +1,26 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
-* Payment module configuration options
-*/
+ * CodeIgniter Payments
+ *
+ * An open source driver based payments system for Codeigniter 2.0+
+ * 
+ * Set all configurarion options below. When adding new drivers remember
+ * to copy the same conventions as seen with the Paypal configuration 
+ * settings below.
+ *
+ * @package       CI Payments
+ * @category      Configuration
+ * @author        Dwayne Charrington
+ * @copyright     Copyright (c) 2011 Dwayne Charrington.
+ * @link          http://ilikekillnerds.com
+ * @license       http://ilikekillnerds.com/licence.txt
+ */
 
 /**
 * Valid payment drivers.
+* All drivers must be prefixed with the name payments_ 
+* otherwise the drivers will not be loaded.
 *
 * @var mixed
 */
@@ -26,7 +41,7 @@ $config['default_driver'] = "paypal";
 *
 * @var mixed
 */
-$config['currency_code'] = "AU";
+$config['currency_code'] = "AUD";
 
 /**
 * Paypal driver configuration settings
@@ -60,6 +75,8 @@ $config['paypal'] = array
 
     // PayPal API signature
     'signature'     => NULL,
+    
+    'debug'         => TRUE   
 );
 
 /**

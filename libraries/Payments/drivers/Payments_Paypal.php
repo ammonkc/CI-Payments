@@ -1,30 +1,54 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 /**
  * CodeIgniter Payments
  *
- * An open source driver based payments system for Codeigniter
+ * An open source driver based payments system for Codeigniter 2.0+.
+ * 
+ * This class is the Paypal driver which controls payments handling via
+ * Paypal IPN (Instant Payment Notifications).
  *
  * @package       CI Payments
  * @subpackage    Paypal
+ * @category      Driver
  * @author        Dwayne Charrington
  * @copyright     Copyright (c) 2011 Dwayne Charrington.
  * @link          http://ilikekillnerds.com
+ * @license       http://ilikekillnerds.com/licence.txt
  */
 
 class Payments_paypal extends CI_Driver {
-
+    
+    // Codeigniter instance
     protected $CI;
+    
+    // Response from Paypal
     protected $_response;
+    
+    // Fields of data to send off to Paypal
     protected $_fields = array();
+    
+    // Configuration settings for Paypal driver
     protected $_config = array();
-
+    
+    /**
+    * Constructor
+    * 
+    */
     public function __construct()
     {
         $this->CI =& get_instance();
         
+        // Load our Payments config file
         $this->CI->load->config('payments');
         
+        // Store settings for this gateway into the class variable _config
         $this->_config = $this->CI->config->item('paypal');
+        
+        /**
+        * Set some default Paypal fields. These can be overwritten by passing
+        * through new values to the process function
+        */
         
         // Return method is POST
         $this->_fields['rm']  = '2';
@@ -52,9 +76,9 @@ class Payments_paypal extends CI_Driver {
     public function decorate() {}
 
     /**
-    * Processes the payment. This will display a form which will then redirect to Paypal.
-    * var mixed $fields
-    *
+    * Process the Payment (send off to Paypal)
+    * 
+    * @param mixed $fields
     */
     public function process($fields = array())
     {
@@ -65,15 +89,8 @@ class Payments_paypal extends CI_Driver {
             $this->_fields[$name] = $value;
         }
         
-        // If we are in test mode, lets overwrite the gateway url with the sandbox url
-        if ($this->_config['mode'] == 'test')
-        {
-            $gateway_url = $this->_config['sandbox_url'];
-        }
-        else
-        {
-            $gateway_url = $this->_config['gateway_url'];
-        }
+        // Get the correct gateway URL
+        $gateway_url = $this->get_gateway_url();
 
         $str = '<html><head><title>Processing Paypal payment..</title></head><body>
             <h2>Preparing Transaction</h2>
@@ -97,15 +114,7 @@ class Payments_paypal extends CI_Driver {
     */
     public function callback()
     {
-        // If we are in test mode, lets overwrite the gateway url with the sandbox url
-        if ($this->_config['mode'] == 'test')
-        {
-            $gateway_url = $this->_config['sandbox_url'];
-        }
-        else
-        {
-            $gateway_url = $this->_config['gateway_url'];
-        }
+        $gateway_url = $this->get_gateway_url();
         
         $url_parsed = parse_url($gateway_url);
 
@@ -186,6 +195,28 @@ class Payments_paypal extends CI_Driver {
         print_r($this->_response);
         echo "</pre>\n";
         return;
+    }
+    
+    /**
+    * Returns the right gateway URL for the Paypal gateway,
+    * depending whether or not we are in sandbox mode.
+    * 
+    */
+    private function get_gateway_url()
+    {
+        $gateway_url = '';
+        
+        // If we are in test mode, lets overwrite the gateway url with the sandbox url
+        if ($this->_config['mode'] == 'test')
+        {
+            $gateway_url = $this->_config['sandbox_url'];
+        }
+        else
+        {
+            $gateway_url = $this->_config['gateway_url'];
+        }
+        
+        return $gateway_url;
     }
 
 }
