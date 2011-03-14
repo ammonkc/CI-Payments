@@ -30,19 +30,33 @@ class Payments extends CI_Driver_Library {
     */
     public function __construct()
     {
-        $this->CI =& get_instance();
+        $this->CI = get_instance();
 
         // Load our config file
-        $this->CI->load->config('payments');
+        $this->load->config('payments');
 
         // Get valid drivers
-        foreach ($this->CI->config->item('valid_drivers') as $driver)
+        foreach ($this->config->item('valid_drivers') as $driver)
         {
             $this->valid_drivers[] = $driver;
         }
 
         // Get default driver
-        $this->_adapter = $this->CI->config->item('default_driver');
+        $this->_adapter = $this->config->item('default_driver');
+    }
+    
+    /**
+    * This function lets us access Codeigniter instance objects like;
+    * helpers, libraries and core functions without having to prefix
+    * our faux Codeigniter instance variable 'CI' we can load Codeigniter
+    * libraries and other goodness like we would normally within controllers
+    * and other things.
+    * 
+    * @param mixed $bleh
+    */
+    public function __get($bleh)
+    {
+        return $this->CI->$bleh;
     }
 
     /**
@@ -57,7 +71,7 @@ class Payments extends CI_Driver_Library {
     }
 
     /**
-    * Some payment processors like Paypal send back data via POST depending
+    * Some payment processors like Paypal send back data via POST or GET depending
     * whether or not the transaction was successfull. Not all payment gateways
     * will have a callback, but it's here in-case.
     *

@@ -53,7 +53,7 @@ class Payments_paypal extends CI_Driver {
         // Return method is POST
         $this->_fields['rm']  = '2';
         
-        // Type of payment this is
+        // Type of payment this is (one click payment)
         $this->_fields['cmd'] = "_xclick";
         
         // Currency code for this payment
