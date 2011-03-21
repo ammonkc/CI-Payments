@@ -20,16 +20,16 @@
 class Payments_paypal extends CI_Driver {
     
     // Codeigniter instance
-    protected $CI;
+    protected $_ci;
     
     // Response from Paypal
     protected $_response;
     
     // Fields of data to send off to Paypal
-    protected $_fields = array();
+    protected $_fields;
     
     // Configuration settings for Paypal driver
-    protected $_config = array();
+    protected $_config;
     
     /**
     * Constructor
@@ -37,13 +37,13 @@ class Payments_paypal extends CI_Driver {
     */
     public function __construct()
     {
-        $this->CI =& get_instance();
+        $this->_ci = get_instance();
         
         // Load our Payments config file
-        $this->CI->load->config('payments');
+        $this->_ci->load->config('payments');
         
         // Store settings for this gateway into the class variable _config
-        $this->_config = $this->CI->config->item('paypal');
+        $this->_config = $this->_ci->config->item('paypal');
         
         /**
         * Set some default Paypal fields. These can be overwritten by passing
@@ -82,7 +82,7 @@ class Payments_paypal extends CI_Driver {
     */
     public function process($fields = array())
     {
-        $this->CI->load->helper('form');
+        $this->_ci->load->helper('form');
         
         foreach ($fields AS $name => $value)
         {
@@ -123,6 +123,7 @@ class Payments_paypal extends CI_Driver {
         // If we have post data
         if ($_POST)
         {
+            log_message('debug', 'IPN data posted: '.$_POST);
             foreach ($_POST as $key => $val)
             {
                 $this->_response[$key] = $val;

@@ -20,7 +20,7 @@
 class Payments extends CI_Driver_Library {
 
     // Codeigniter superobject
-    protected $CI;
+    protected $_ci;
 
     /**
     * Constructor
@@ -30,40 +30,35 @@ class Payments extends CI_Driver_Library {
     */
     public function __construct()
     {
-        $this->CI = get_instance();
+        $this->_ci = get_instance();
 
         // Load our config file
-        $this->load->config('payments');
+        $this->_ci->load->config('payments');
 
         // Get valid drivers
-        foreach ($this->config->item('valid_drivers') as $driver)
+        foreach ($this->_ci->config->item('valid_drivers') AS $driver)
         {
             $this->valid_drivers[] = $driver;
         }
 
         // Get default driver
-        $this->_adapter = $this->config->item('default_driver');
+        $this->_adapter = $this->_ci->config->item('default_driver');
     }
     
     /**
-    * This function lets us access Codeigniter instance objects like;
-    * helpers, libraries and core functions without having to prefix
-    * our faux Codeigniter instance variable 'CI' we can load Codeigniter
-    * libraries and other goodness like we would normally within controllers
-    * and other things.
+    * If the requested method is not found, see if the child class
+    * has implemented it.
     * 
     * @param mixed $bleh
     */
     public function __get($bleh)
     {
-        return $this->CI->$bleh;
+        return $this->{$this->_adapter}->$bleh;
     }
 
     /**
-    * Process payment using Payment processing function
-    * which will call the child driver process function
-    * which will process the payment.
-    *
+    * Process payment using Payment processing function which will call the child 
+    * driver process function which will process the payment.
     */
     public function process($fields = array())
     {
@@ -74,7 +69,6 @@ class Payments extends CI_Driver_Library {
     * Some payment processors like Paypal send back data via POST or GET depending
     * whether or not the transaction was successfull. Not all payment gateways
     * will have a callback, but it's here in-case.
-    *
     */
     public function callback()
     {

@@ -66,12 +66,15 @@ $config['paypal'] = array
     'failure_url'   => 'payment/failure',
     'notify_url'    => 'payment/validate',
     
+    // Payment amount defaults to false
+    'amt'    => FALSE,
+    
     // Submit button for Paypal button
     'submit_button'    => 'Proceed to Paypal!',
 
     // PayPal API and username
-    'username'      => NULL,
-    'password'      => NULL,
+    'user'      => NULL,
+    'pwd'      => NULL,
 
     // PayPal API signature
     'signature'     => NULL,
