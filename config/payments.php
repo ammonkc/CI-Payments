@@ -24,10 +24,7 @@
 *
 * @var mixed
 */
-$config['valid_drivers'] = array
-(
-    "payments_paypal"
-);
+$config['valid_drivers'] = array("payments_paypal");
 
 /**
 * Default payment driver used to process site payments

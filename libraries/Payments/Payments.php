@@ -46,14 +46,16 @@ class Payments extends CI_Driver_Library {
     }
     
     /**
-    * If the requested method is not found, see if the child class
-    * has implemented it.
+    * Redirect all method calls not in this class to the child class
+    * set in the variable _adapter which is the default class.
     * 
-    * @param mixed $bleh
+    * @param mixed $child
+    * @param mixed $arguments
+    * @return mixed
     */
-    public function __get($bleh)
+    public function __call($child, $arguments)
     {
-        return $this->{$this->_adapter}->$bleh;
+        return call_user_func_array(array($this->{$this->_adapter}, $child), $arguments);
     }
 
     /**
