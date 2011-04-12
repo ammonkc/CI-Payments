@@ -24,7 +24,7 @@
 *
 * @var mixed
 */
-$config['valid_drivers'] = array("payments_paypal");
+$config['valid_drivers'] = array("payments_paypal", "payments_authorize_aim");
 
 /**
 * Default payment driver used to process site payments
@@ -38,20 +38,19 @@ $config['default_driver'] = "paypal";
 *
 * @var mixed
 */
-$config['currency_code'] = "AUD";
+$config['currency_code'] = "USD";
 
 /**
 * Paypal driver configuration settings
 *
 * @var mixed
 */
-$config['paypal'] = array
-(
+$config['paypal'] = array(
     // test means use the sandbox, live means use in production
     'mode'          => 'test',
     
     // Default currency code for payments
-    'currency_code' => 'AU',
+    'currency_code' => 'US',
 
     // Where payments are processed
     'gateway_url'   => 'https://www.paypal.com/cgi-bin/webscr',
@@ -64,19 +63,50 @@ $config['paypal'] = array
     'notify_url'    => 'payment/validate',
     
     // Payment amount defaults to false
-    'amt'    => FALSE,
+    'amt'           => FALSE,
     
     // Submit button for Paypal button
-    'submit_button'    => 'Proceed to Paypal!',
+    'submit_button' => 'Proceed to Paypal!',
 
     // PayPal API and username
-    'user'      => NULL,
-    'pwd'      => NULL,
+    'user'          => NULL,
+    'pwd'           => NULL,
 
     // PayPal API signature
     'signature'     => NULL,
     
     'debug'         => TRUE   
+);
+
+/**
+* Authorize.net AIM api driver configuration
+*
+* @var mixed
+*/
+$config['authorize_net'] = array(
+    'test_mode'            => 'TRUE',  // Set this to FALSE for live processing
+    
+    // Test server
+    'test_x_login'         => '', // Authorize.net developer login
+    'test_x_tran_key'      => '', // Authorize.net developer transaction key
+    'test_api_host'        => 'https://test.authorize.net/gateway/transact.dll',
+    
+    // Live server
+    'live_x_login'         => '', // Authorize.net live login
+    'live_x_tran_key'      => '', // Authorize.net live transaction key
+    'live_api_host'        => 'https://secure.authorize.net/gateway/transact.dll',
+    
+    // Transaction details
+    'x_version'            => '3.1',
+    'x_type'               => 'AUTH_CAPTURE',
+    'x_relay_response'     => 'FALSE',
+    'x_delim_data'         => 'TRUE',
+    'x_delim_char'         => '|',
+    'x_encap_char'         => '',
+    'x_url'                => 'FALSE',
+    'x_method'             => 'CC',
+    'x_currency_code'      => 'USD',
+    'x_duplicate_window'   => '120',
 );
 
 /**
@@ -86,6 +116,6 @@ $config['paypal'] = array
 *
 * @var mixed
 */
-$config['googlecheckout'] = array
-(
+$config['googlecheckout'] = array(
+    
 );
