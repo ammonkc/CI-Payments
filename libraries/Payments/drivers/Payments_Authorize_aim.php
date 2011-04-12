@@ -201,8 +201,8 @@ class Payments_authorize_aim extends CI_Driver {
     * @access	public
     * @return	prints output directly to browser.
     */
-   function dump_fields() {				
-		echo "<h3>authorizenet_class->dump_fields() Output:</h3>";
+   function debug_fields() {				
+		echo "<h3>payments->debug_fields() Output:</h3>";
 		echo "<table width=\"95%\" border=\"1\" cellpadding=\"2\" cellspacing=\"0\">
 		    <tr>
 		       <td bgcolor=\"black\"><b><font color=\"white\">Field Name</font></b></td>
@@ -227,7 +227,7 @@ class Payments_authorize_aim extends CI_Driver {
     * @access	public
     * @return	returns all the field/value pairs
     */
-   function dump_response() {             
+   function debug_response() {             
       $i = 0;
       foreach ($this->_response as $key => $value) {
          $this->debuginfo .= "$key: $value\n";
