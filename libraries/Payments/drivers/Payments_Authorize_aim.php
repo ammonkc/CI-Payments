@@ -14,7 +14,7 @@
  * @category    Driver
  * @copyright	Copyright (c) 2011, Ammon Casey
  * @link		http://brokenparadigmlabs.com
- * @license     
+ * @license     http://www.opensource.org/licenses/mit-license.php
  * @version		Version 0.2
  */
 class Payments_authorize_aim extends CI_Driver {
