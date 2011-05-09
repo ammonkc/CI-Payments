@@ -72,8 +72,6 @@ class Payments_paypal extends CI_Driver {
         $this->_fields['notify_url']    = $this->_config['notify_url'];
         
     }
-    
-    public function decorate() {}
 
     /**
     * Process the Payment (send off to Paypal)
@@ -115,8 +113,7 @@ class Payments_paypal extends CI_Driver {
     public function callback()
     {
         $gateway_url = $this->get_gateway_url();
-        
-        $url_parsed = parse_url($gateway_url);
+        $url_parsed  = parse_url($gateway_url);
 
         $post_string = '';
 
@@ -199,25 +196,16 @@ class Payments_paypal extends CI_Driver {
     }
     
     /**
-    * Returns the right gateway URL for the Paypal gateway,
-    * depending whether or not we are in sandbox mode.
+    * Get Gateway URL
+    * Returns the Paypal API URL to use
     * 
     */
     private function get_gateway_url()
     {
-        $gateway_url = '';
-        
-        // If we are in test mode, lets overwrite the gateway url with the sandbox url
-        if ($this->_config['mode'] == 'test')
-        {
-            $gateway_url = $this->_config['sandbox_url'];
-        }
-        else
-        {
-            $gateway_url = $this->_config['gateway_url'];
-        }
-        
-        return $gateway_url;
+        return ($this->_config['mode'] == 'test') ? $this->_config['sandbox_url'] : $this->_config['gateway_url'];
     }
+    
+    // Read somewhere that you need this function for Codeigniter drivers...
+    public function decorate() {}
 
 }
