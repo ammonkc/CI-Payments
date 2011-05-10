@@ -19,9 +19,6 @@
 
 class Payments extends CI_Driver_Library {
 
-    // Codeigniter superobject
-    protected $_ci;
-
     /**
     * Constructor
     *
@@ -30,19 +27,19 @@ class Payments extends CI_Driver_Library {
     */
     public function __construct()
     {
-        $this->_ci = get_instance();
+        $ci = get_instance();
 
         // Load our config file
-        $this->_ci->load->config('payments');
+        $ci->load->config('payments');
 
         // Get valid drivers
-        foreach ($this->_ci->config->item('valid_drivers') AS $driver)
+        foreach (config_item('valid_drivers') AS $driver)
         {
             $this->valid_drivers[] = $driver;
         }
 
         // Get default driver
-        $this->_adapter = $this->_ci->config->item('default_driver');
+        $this->_adapter = config_item('default_driver');
     }
     
     /**
