@@ -43,7 +43,7 @@ class Payments_paypal extends CI_Driver {
         $this->CI->load->config('payments');
         
         // Store settings for this gateway into the class variable _config
-        $this->_config = $this->CI->config->item('paypal');
+        $this->_config = config_item('paypal');
         
         /**
         * Set some default Paypal fields. These can be overwritten by passing
