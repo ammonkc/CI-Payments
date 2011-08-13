@@ -57,20 +57,39 @@ class Payments_paypal extends CI_Driver {
         $this->_fields['cmd'] = "_xclick";
         
         // Currency code for this payment
-        $this->_fields['currency_code'] = $this->_config['currency_code'];
+        $this->_fields['currency_code'] = $this->config_item('currency_code');
         
         // No note along with the payment
         $this->_fields['no_note'] = "1";
         
         // Upon successful payment
-        $this->_fields['return'] = $this->_config['success_url'];
+        $this->_fields['return'] = $this->config_item('success_url');
         
         // Failure URL
-        $this->_fields['cancel_return'] = $this->_config['failure_url'];
+        $this->_fields['cancel_return'] = $this->config_item('failure_url');
         
         // IPN notification url
-        $this->_fields['notify_url']    = $this->_config['notify_url'];
+        $this->_fields['notify_url']    = $this->config_item('notify_url');
         
+    }
+    
+    /**
+    * Config Item
+    * Just a shortcut function so you don't have to write
+    * $this->_config['itemname']
+    * 
+    * @param mixed $name
+    */
+    public function config_item($name)
+    {
+        if ( isset($this->_config[$name]) )
+        {
+            return $this->_config[$name]; 
+        }
+        else
+        {
+            return FALSE;
+        }
     }
 
     /**
@@ -101,7 +120,7 @@ class Payments_paypal extends CI_Driver {
             $str .= '<input type="hidden" name="' . $name . '" value="' . $value . '" />' . "\n";
         }
 
-        $str .= '<input type="submit" value="'.$this->_config["submit_button"].'" name="pp_submit" id="pp_submit" /></p></form></body></html>';
+        $str .= '<input type="submit" value="'.$this->config_item("submit_button").'" name="pp_submit" id="pp_submit" /></p></form></body></html>';
 
         echo $str;
     }
@@ -202,7 +221,7 @@ class Payments_paypal extends CI_Driver {
     */
     private function get_gateway_url()
     {
-        return ($this->_config['mode'] == 'test') ? $this->_config['sandbox_url'] : $this->_config['gateway_url'];
+        return ($this->config_item('mode') == 'test') ? $this->config_item('sandbox_url') : $this->config_item('gateway_url');
     }
     
     // Read somewhere that you need this function for Codeigniter drivers...
