@@ -20,7 +20,7 @@
 class Payments_paypal extends CI_Driver {
     
     // Codeigniter instance
-    protected $_ci;
+    protected $CI;
     
     // Response from Paypal
     protected $_response;
@@ -37,13 +37,13 @@ class Payments_paypal extends CI_Driver {
     */
     public function __construct()
     {
-        $this->_ci = get_instance();
+        $this->CI = get_instance();
         
         // Load our Payments config file
-        $this->_ci->load->config('payments');
+        $this->CI->load->config('payments');
         
         // Store settings for this gateway into the class variable _config
-        $this->_config = $this->_ci->config->item('paypal');
+        $this->_config = $this->CI->config->item('paypal');
         
         /**
         * Set some default Paypal fields. These can be overwritten by passing
@@ -80,7 +80,7 @@ class Payments_paypal extends CI_Driver {
     */
     public function process($fields = array())
     {
-        $this->_ci->load->helper('form');
+        $this->CI->load->helper('form');
         
         foreach ($fields AS $name => $value)
         {
