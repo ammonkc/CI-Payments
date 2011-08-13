@@ -27,10 +27,10 @@ class Payments extends CI_Driver_Library {
     */
     public function __construct()
     {
-        $ci = get_instance();
+        $CI = get_instance();
 
         // Load our config file
-        $ci->load->config('payments');
+        $CI->load->config('payments');
 
         // Get valid drivers
         foreach (config_item('valid_drivers') AS $driver)
