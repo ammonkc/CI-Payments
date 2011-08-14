@@ -50,11 +50,11 @@ class Payments_paypal extends CI_Driver {
         * through new values to the process function
         */
         
-        // Return method is POST
-        $this->_fields['rm']  = '2';
+        // Return method
+        $this->_fields['rm']  = $this->config_item('return_method');
         
-        // Type of payment this is (one click payment)
-        $this->_fields['cmd'] = "_xclick";
+        // Type of payment this is
+        $this->_fields['cmd'] = $this->config_item('payment_type');
         
         // Currency code for this payment
         $this->_fields['currency_code'] = $this->config_item('currency_code');
