@@ -114,7 +114,7 @@ class Payments_paypal extends CI_Driver {
         $data['submit_button'] = $this->config_item("submit_button");
 
         // Load our processing view
-        $this->load->view('payments/processing.php', $data);
+        $this->load->view('payments/paypal/processing.php', $data);
     }
 
     /**
