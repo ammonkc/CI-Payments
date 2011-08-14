@@ -106,23 +106,15 @@ class Payments_paypal extends CI_Driver {
             $this->_fields[$name] = $value;
         }
         
-        // Get the correct gateway URL
-        $gateway_url = $this->get_gateway_url();
+        // View data
+        $data['page_title'] = "Processing Paypal payment..";
+        $data['page_heading'] = "Preparing Transaction";
+        $data['gateway_url'] = $this->get_gateway_url();
+        $data['fields'] = $this->_fields;
+        $data['submit_button'] = $this->config_item("submit_button");
 
-        $str = '<html><head><title>Processing Paypal payment..</title></head><body>
-            <h2>Preparing Transaction</h2>
-            <p style="text-align:center;">Please wait while your order is being processed.<br />You will be redirected to the paypal website.</p>
-            <p style="text-align:center;">If your browser does not redirect you, please<br />click the Continue button below to proceed.</p>
-            <form id="paypal" name="paypal" method="post" action="'.$gateway_url.'"><p style="text-align:center;padding-top:20px;">' . "\n";
-
-        foreach ($this->_fields as $name => $value)
-        {
-            $str .= '<input type="hidden" name="' . $name . '" value="' . $value . '" />' . "\n";
-        }
-
-        $str .= '<input type="submit" value="'.$this->config_item("submit_button").'" name="pp_submit" id="pp_submit" /></p></form></body></html>';
-
-        echo $str;
+        // Load our processing view
+        $this->load->view('payments/processing.php', $data);
     }
 
     /**
