@@ -49,6 +49,12 @@ $config['paypal'] = array(
     // test means use the sandbox, live means use in production
     'mode'          => 'test',
     
+    // Return method of which Paypal will respond with (2 is POST)
+    'return_method' => '2',
+    
+    // Payment type default is: one click payment
+    'payment_type' => '_xclick',
+    
     // Default currency code for payments
     'currency_code' => 'US',
 

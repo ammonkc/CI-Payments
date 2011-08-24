@@ -20,7 +20,7 @@
 class Payments_authorize_aim extends CI_Driver {
 	
 	// Codeigniter instance
-	protected $_ci;
+	protected $CI;
 	
 	// Response from Authorize.net
 	protected $_response = array();
@@ -46,25 +46,29 @@ class Payments_authorize_aim extends CI_Driver {
      **/
     public function __construct()
     {
-		$this->_ci = get_instance();
+		$this->CI = get_instance();
 		
 		// Load our Payments config file
-		$this->_ci->load->config('payments');
+		$this->CI->load->config('payments');
 		
 		// Store settings for this gateway into the class variable _config
-		$this->_config = $this->_ci->config->item('authorize_net');
+		$this->_config = config_item('authorize_net');
         
-		if( $this->_config['test_mode'] == 'TRUE' ) {
+		if ( $this->_config['test_mode'] == 'TRUE' ) 
+        {
 			$this->gateway_url = $this->_config['test_api_host'];
 			$this->add_x_field('x_test_request', $this->_config['test_mode']);
 			$this->add_x_field('x_login', $this->_config['test_x_login']);
 			$this->add_x_field('x_tran_key', $this->_config['test_x_tran_key']);
-		}else{
+		}
+        else
+        {
 			$this->gateway_url = $this->_config['live_api_host'];
 			$this->add_x_field('x_test_request', $this->_config['test_mode']);
 			$this->add_x_field('x_login', $this->_config['live_x_login']);
 			$this->add_x_field('x_tran_key', $this->_config['live_x_tran_key']);
 		}
+        
 		$this->add_x_field('x_version', $this->_config['x_version']);
       	$this->add_x_field('x_delim_data', $this->_config['x_delim_data']);
       	$this->add_x_field('x_delim_char', $this->_config['x_delim_char']);  
@@ -86,14 +90,17 @@ class Payments_authorize_aim extends CI_Driver {
 	 * @param mixed $value
 	 * @access	public
 	 */
-	function add_x_field( $field, $value = '' ) {
+	function add_x_field( $field, $value = '' ) 
+    {
 	    if ( is_array($field) )
 	    {
 	        foreach($field as $key => $val)
 	        {
 	            $this->_fields[$key] = $val;
 	        }
-	    }else{
+	    }
+        else
+        {
             $this->_fields[$field] = $value;
         }
     }
@@ -119,25 +126,30 @@ class Payments_authorize_aim extends CI_Driver {
     * @access	public
     * @return	returns response code 1,2,3
     */
-    function process( $fields = array() ) {
-    
+    function process( $fields = array() ) 
+    {
         $this->_fields = array_merge($this->_fields, $fields);
         
         foreach( $this->_fields as $key => $value ) {
         	$this->field_string .= "$key=" . urlencode( $value ) . "&";
         }
+        
         $ch = curl_init($this->gateway_url); 
         curl_setopt($ch, CURLOPT_HEADER, 0); 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
         curl_setopt($ch, CURLOPT_POSTFIELDS, rtrim( $this->field_string, "& " )); 
         $this->response_string = urldecode(curl_exec($ch)); 
         
-        if (curl_errno($ch)) {
+        if ( curl_errno($ch) ) 
+        {
         	$this->_response['Response_Reason_Text'] = curl_error($ch);
         	return 3;
-        }else{
+        }
+        else
+        {
         	curl_close ($ch);
         }
+        
         $temp_values = explode($this->_config['x_delim_char'], $this->response_string);
         $temp_keys = array ( 
         	"Response_Code", "Response_Subcode", "Response_Reason_Code", "Response_Reason_Text",
@@ -145,22 +157,26 @@ class Payments_authorize_aim extends CI_Driver {
         	"Amount", "Method", "Transaction_Type", "Customer_ID", "Cardholder_First_Name",
         	"Cardholder Last_Name", "Company", "Billing_Address", "City", "State",
         	"Zip", "Country", "Phone", "Fax", "Email", "Ship_to_First_Name", "Ship_to_Last_Name",
-        	"Ship_to_Company", "Ship_to_Address", "Ship_to_City", "Ship_to_State",
+        	"Ship_to_Company", "Ship_to_Address", "Ship_to_city", "Ship_to_State",
         	"Ship_to_Zip", "Ship_to_Country", "Tax_Amount", "Duty_Amount", "Freight_Amount",
         	"Tax_Exempt_Flag", "PO_Number", "MD5_Hash", "Card_Code_CVV_Response Code",
         	"Cardholder_Authentication_Verification_Value_CAVV_Response_Code"
         );
+        
         for ($i=0; $i<=27; $i++) {
         	array_push($temp_keys, 'Reserved_Field '.$i);
         }
+        
         $i=0;
         while (sizeof($temp_keys) < sizeof($temp_values)) {
         	array_push($temp_keys, 'Merchant_Defined_Field '.$i);
         	$i++;
         }
+        
         for ($i=0; $i<sizeof($temp_values);$i++) {
         	$this->_response["$temp_keys[$i]"] = $temp_values[$i];
         }
+        
         return $this->_response['Response_Code'];
     }
    
@@ -173,7 +189,8 @@ class Payments_authorize_aim extends CI_Driver {
     * @access	public
     * @return	returns the response reason text
     */
-   function get_response_reason_text() {
+   function get_response_reason_text() 
+   {
 		return $this->_response['Response_Reason_Text'];
    }
    
@@ -187,7 +204,8 @@ class Payments_authorize_aim extends CI_Driver {
 	 * @access	public
 	 * @return returns all codes and values in a array.
 	 */
-	function get_all_response_codes() {
+	function get_all_response_codes() 
+    {
 		return $this->_response;
 	}
 
@@ -201,7 +219,8 @@ class Payments_authorize_aim extends CI_Driver {
     * @access	public
     * @return	prints output directly to browser.
     */
-   function debug_fields() {				
+   function debug_fields() 
+   {				
 		echo "<h3>payments->debug_fields() Output:</h3>";
 		echo "<table width=\"95%\" border=\"1\" cellpadding=\"2\" cellspacing=\"0\">
 		    <tr>
@@ -227,7 +246,8 @@ class Payments_authorize_aim extends CI_Driver {
     * @access	public
     * @return	returns all the field/value pairs
     */
-   function debug_response() {             
+   function debug_response() 
+   {             
       $i = 0;
       foreach ($this->_response as $key => $value) {
          $this->debuginfo .= "$key: $value\n";
@@ -266,7 +286,8 @@ class Payments_authorize_aim extends CI_Driver {
     * @access	public
     * @return	returns the response reason text
     */
-   function get_fields() {
+   function get_fields() 
+   {
    		return $this->_fields;
    }
    

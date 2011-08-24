@@ -20,7 +20,7 @@
 class Payments_paypal extends CI_Driver {
     
     // Codeigniter instance
-    protected $_ci;
+    protected $CI;
     
     // Response from Paypal
     protected $_response;
@@ -37,40 +37,59 @@ class Payments_paypal extends CI_Driver {
     */
     public function __construct()
     {
-        $this->_ci = get_instance();
+        $this->CI = get_instance();
         
         // Load our Payments config file
-        $this->_ci->load->config('payments');
+        $this->CI->load->config('payments');
         
         // Store settings for this gateway into the class variable _config
-        $this->_config = $this->_ci->config->item('paypal');
+        $this->_config = config_item('paypal');
         
         /**
         * Set some default Paypal fields. These can be overwritten by passing
         * through new values to the process function
         */
         
-        // Return method is POST
-        $this->_fields['rm']  = '2';
+        // Return method
+        $this->_fields['rm']  = $this->config_item('return_method');
         
-        // Type of payment this is (one click payment)
-        $this->_fields['cmd'] = "_xclick";
+        // Type of payment this is
+        $this->_fields['cmd'] = $this->config_item('payment_type');
         
         // Currency code for this payment
-        $this->_fields['currency_code'] = $this->_config['currency_code'];
+        $this->_fields['currency_code'] = $this->config_item('currency_code');
         
         // No note along with the payment
         $this->_fields['no_note'] = "1";
         
         // Upon successful payment
-        $this->_fields['return'] = $this->_config['success_url'];
+        $this->_fields['return'] = $this->config_item('success_url');
         
         // Failure URL
-        $this->_fields['cancel_return'] = $this->_config['failure_url'];
+        $this->_fields['cancel_return'] = $this->config_item('failure_url');
         
         // IPN notification url
-        $this->_fields['notify_url']    = $this->_config['notify_url'];
+        $this->_fields['notify_url']    = $this->config_item('notify_url');
         
+    }
+    
+    /**
+    * Config Item
+    * Just a shortcut function so you don't have to write
+    * $this->_config['itemname']
+    * 
+    * @param mixed $name
+    */
+    public function config_item($name)
+    {
+        if ( isset($this->_config[$name]) )
+        {
+            return $this->_config[$name]; 
+        }
+        else
+        {
+            return FALSE;
+        }
     }
 
     /**
@@ -80,30 +99,22 @@ class Payments_paypal extends CI_Driver {
     */
     public function process($fields = array())
     {
-        $this->_ci->load->helper('form');
+        $this->CI->load->helper('form');
         
         foreach ($fields AS $name => $value)
         {
             $this->_fields[$name] = $value;
         }
         
-        // Get the correct gateway URL
-        $gateway_url = $this->get_gateway_url();
+        // View data
+        $data['page_title'] = "Processing Paypal payment..";
+        $data['page_heading'] = "Preparing Transaction";
+        $data['gateway_url'] = $this->get_gateway_url();
+        $data['fields'] = $this->_fields;
+        $data['submit_button'] = $this->config_item("submit_button");
 
-        $str = '<html><head><title>Processing Paypal payment..</title></head><body>
-            <h2>Preparing Transaction</h2>
-            <p style="text-align:center;">Please wait while your order is being processed.<br />You will be redirected to the paypal website.</p>
-            <p style="text-align:center;">If your browser does not redirect you, please<br />click the Continue button below to proceed.</p>
-            <form id="paypal" name="paypal" method="post" action="'.$gateway_url.'"><p style="text-align:center;padding-top:20px;">' . "\n";
-
-        foreach ($this->_fields as $name => $value)
-        {
-            $str .= '<input type="hidden" name="' . $name . '" value="' . $value . '" />' . "\n";
-        }
-
-        $str .= '<input type="submit" value="'.$this->_config["submit_button"].'" name="pp_submit" id="pp_submit" /></p></form></body></html>';
-
-        echo $str;
+        // Load our processing view
+        $this->load->view('payments/paypal/processing.php', $data);
     }
 
     /**
@@ -202,7 +213,7 @@ class Payments_paypal extends CI_Driver {
     */
     private function get_gateway_url()
     {
-        return ($this->_config['mode'] == 'test') ? $this->_config['sandbox_url'] : $this->_config['gateway_url'];
+        return ($this->config_item('mode') == 'test') ? $this->config_item('sandbox_url') : $this->config_item('gateway_url');
     }
     
     // Read somewhere that you need this function for Codeigniter drivers...
