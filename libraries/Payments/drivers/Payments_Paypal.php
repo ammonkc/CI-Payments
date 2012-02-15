@@ -37,7 +37,7 @@ class Payments_paypal extends CI_Driver {
     */
     public function __construct()
     {
-        $this->CI = get_instance();
+        $this->CI =& get_instance();
         
         // Load our Payments config file
         $this->CI->load->config('payments');
